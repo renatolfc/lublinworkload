@@ -6,6 +6,7 @@ A Python port of the Workload Model proposed by Lublin & Feitelson.
 The following code shows how to use it:
 
 .. code:: python
+
    from lublinworkload import lublin
    w = lublin.Lublin99(1, 2)  # Will use both batch and interactive jobs
    w.numJobs=4  # will generate four jobs
@@ -30,3 +31,4 @@ The following code shows how to use it:
    allocProcs=32, avgCpuUsage=-1, usedMem=-1, reqProcs=-1, reqTime=-1,
    reqMem=-1, status=1, userId=-1, groupId=-1, executable=-1, queueNum=0,
    partNum=-1, precedingJob=-1, thinkTime=-1)]
+
