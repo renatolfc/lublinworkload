@@ -7,8 +7,8 @@ The following code shows how to use it:
 
 .. code:: python
 
-   from lublinworkload import lublin
-   w = lublin.Lublin99(1, 2)  # Will use both batch and interactive jobs
+   from parallelworkloads import lublin99
+   w = lublin99.Lublin99(1, 2)  # Will use both batch and interactive jobs
    w.numJobs=4  # will generate four jobs
    w.generate()  # The four generated jobs are shown below
 

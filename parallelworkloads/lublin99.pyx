@@ -133,7 +133,7 @@ cdef class Lublin99:
 
         if uLow > uHi:
             raise ValueError(
-                "Low probability cannot be higher than high probability"
+                "Lowest job size cannot be higher than max job size"
             )
 
         if not (uHi - 1.5 < uMed < uHi - 3.5):

@@ -26,11 +26,11 @@ long_description = (here / 'README.rst').read_text(encoding='utf-8')
 # Fields marked as "Optional" may be commented out.
 
 setup(
-    name='lublinworkload',
+    name='parallelworkloads',
     description='A Python Wrapper for the workload model proposed by Lublin',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    url='https://github.com/renatolfc/lublinworkload',
+    url='https://github.com/renatolfc/parallelworkloads',
     author='Renato L. de F. Cunha',
     author_email='renatocunha@acm.org',
 
@@ -59,13 +59,13 @@ setup(
     ],
 
     ext_modules = cythonize([
-        Extension('lublin', ['lublinworkload/lublin.pyx'])
+        Extension('lublin99', ['parallelworkloads/lublin99.pyx'])
     ]),
 
     keywords='workload, standard workload format, swf',
 
-    package_dir={'': 'lublinworkload'},
-    packages=find_packages(where='lublinworkload'),
+    package_dir={'': 'parallelworkloads'},
+    packages=find_packages(where='parallelworkloads'),
     python_requires='>=3.6, <4',
 
     # This field lists other packages that your project depends on to run.
@@ -88,8 +88,8 @@ setup(
     # maintainers, and where to support the project financially. The key is
     # what's used to render the link text on PyPI.
     project_urls={  # Optional
-        'Bug Reports': 'https://github.com/renatolfc/lublinworkload/issues',
+        'Bug Reports': 'https://github.com/renatolfc/parallelworkloads/issues',
         'Say Thanks!': 'https://saythanks.io/to/renatocunha%40acm.org',
-        'Source': 'https://github.com/renatolfc/lublinworkload',
+        'Source': 'https://github.com/renatolfc/parallelworkloads',
     },
 )
