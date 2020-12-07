@@ -42,10 +42,11 @@ install:
 script:
   - python setup.py build_ext
   - python setup.py bdist_egg
+  - python setup.py bdist_wheel
 deploy:
   provider: pypi
   username: trovao
-  distributions: sdist bdist_egg
+  distributions: sdist bdist_egg bdist_wheel
   edge: true
   on:
     tags: true
