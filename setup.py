@@ -62,7 +62,7 @@ setup(
         Extension('swf', ['parallelworkloads/swf.pyx']),
         Extension('lublin99', ['parallelworkloads/lublin99.pyx']),
         Extension('tsafrir05', ['parallelworkloads/tsafrir05.pyx']),
-    ]),
+    ], language_level=3),
 
     keywords='workload, standard workload format, swf',
 
