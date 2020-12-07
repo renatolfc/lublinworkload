@@ -1,52 +1,39 @@
 language: python
-addons:
-  apt:
-    packages:
-      - gdb
-      - python-dbg
-      - python3-dbg
-python:
-  - "3.5"
-  - "3.6"
-  - "3.7"
-  - "3.8"
-  - "3.9"
-before_install:
-  - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      # adding apt repos in travis is really fragile => retry a couple of times.
-      for i in {1..10}; do travis_retry sudo apt-add-repository --yes 'ppa:ubuntu-toolchain-r/test' && break; sleep 2; done
-      for i in {1..10}; do travis_retry sudo apt-get update && travis_retry sudo apt-get install --yes gcc-8  $(if [ -z "${BACKEND##*cpp*}" ]; then echo -n "g++-8"; fi ) && break; sleep 2; done
-      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 $(if [ -z "${BACKEND##*cpp*}" ]; then echo " --slave /usr/bin/g++ g++ /usr/bin/g++-8"; fi)
-      sudo update-alternatives --set gcc /usr/bin/gcc-8
-      export CC=gcc
-      if [ -z "${BACKEND##*cpp*}" ]; then sudo update-alternatives --set g++ /usr/bin/g++-8; export CXX=g++; fi
-    fi
-  - |
-    if [ "$TRAVIS_OS_NAME" == "osx" -o "$STACKLESS" == "true" ]; then
-      echo "Installing Miniconda"
-      if [ "$TRAVIS_OS_NAME" == "osx" ]; then CONDA_PLATFORM=MacOSX; else CONDA_PLATFORM=Linux; fi
-      travis_retry wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda$PY-latest-${CONDA_PLATFORM}-x86_64.sh || exit 1
-      bash miniconda.sh -b -p $HOME/miniconda && rm miniconda.sh || exit 1
-      conda --version || exit 1
-      #conda install --quiet --yes nomkl --file=test-requirements.txt --file=test-requirements-cpython.txt
-      if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-        which clang && clang --version && export CC="clang -Wno-deprecated-declarations" || true
-        which clang++ && clang++ --version && export CXX="clang++ -stdlib=libc++ -Wno-deprecated-declarations" || true
-      fi
-    fi
-  - if [ -n "$CC" ]; then which ${CC%% *}; $CC --version; fi
-  - if [ -n "$CXX" ]; then which ${CXX%% *}; $CXX --version; fi
+
+matrix:
+  include:
+    - sudo: required
+      services:
+        - docker
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
+           PLAT=manylinux1_x86_64
+    - sudo: required
+      services:
+        - docker
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686
+           PRE_CMD=linux32
+           PLAT=manylinux1_i686
+    - sudo: required
+      services:
+        - docker
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64
+           PLAT=manylinux2010_x86_64
+
 install:
-  - pip install -r requirements.txt
+  - docker pull $DOCKER_IMAGE
+
 script:
-  - python setup.py build_ext
-  - python setup.py bdist_egg
-  - python setup.py bdist_wheel
+  - docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+  - ls wheelhouse/
+
+before_deploy:
+  - mv wheelhouse dist
+
 deploy:
   provider: pypi
   username: trovao
-  distributions: sdist bdist_egg bdist_wheel
+  distributions: sdist bdist_wheel
   edge: true
   on:
     tags: true
+  skip_existing: true
