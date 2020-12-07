@@ -193,6 +193,3 @@ cdef class SwfJob:
     # }}}
 
     # }}}
-
-cdef _swf.Job_t base(SwfJob job):
-    return job.job

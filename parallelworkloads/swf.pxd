@@ -6,4 +6,5 @@ cdef class SwfJob:
     cdef _swf.Job_t job
 
 cdef object build(_swf.JobPointer)
-cdef _swf.Job_t base(SwfJob)
+cdef inline _swf.Job_t base(SwfJob job):
+    return job.job

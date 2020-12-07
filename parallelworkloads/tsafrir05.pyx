@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from libcpp.vector cimport vector
 
-cimport swf
+from parallelworkloads cimport swf
 from parallelworkloads cimport _tsafrir05
 from parallelworkloads._swf cimport Job_t
 
