@@ -52,5 +52,7 @@ model proposed by Dan Tsafrir in 2005. For the model to work, it needs at least
 
 Which gives as output:
 
+.. code::
+
    Original requested time: -1
    Generated requested time: 22962.0
