@@ -15,7 +15,10 @@ try:
 except NameError:
     def cythonize(*args, **kwargs):
         pass
-import pathlib
+try:
+    import pathlib
+except NameError:
+    import pathlib2 as pathlib
 
 here = pathlib.Path(__file__).parent.resolve()
 
