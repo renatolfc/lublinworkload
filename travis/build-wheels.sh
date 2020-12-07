@@ -13,7 +13,7 @@ function repair_wheel {
 # Compile wheels
 for PYBIN in /opt/python/*/bin; do
     "${PYBIN}/pip" install -r /io/requirements.txt
-    "${PYBIN}/python" -c 'import pathlib' || "${PYBIN}/pip" install pathlib
+    "${PYBIN}/python" -c 'import pathlib' || "${PYBIN}/pip" install pathlib2
     "${PYBIN}/pip" wheel /io/ --no-deps -w wheelhouse/
 done
 
