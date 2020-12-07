@@ -1,4 +1,10 @@
 language: python
+addons:
+  apt:
+    packages:
+      - gdb
+      - python-dbg
+      - python3-dbg
 python:
   - "3.4"
   - "3.5"
@@ -6,6 +12,32 @@ python:
   - "3.7"
   - "3.8"
   - "3.9"
+before_install:
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      # adding apt repos in travis is really fragile => retry a couple of times.
+      for i in {1..10}; do travis_retry sudo apt-add-repository --yes 'ppa:ubuntu-toolchain-r/test' && break; sleep 2; done
+      for i in {1..10}; do travis_retry sudo apt-get update && travis_retry sudo apt-get install --yes gcc-8  $(if [ -z "${BACKEND##*cpp*}" ]; then echo -n "g++-8"; fi ) && break; sleep 2; done
+      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 $(if [ -z "${BACKEND##*cpp*}" ]; then echo " --slave /usr/bin/g++ g++ /usr/bin/g++-8"; fi)
+      sudo update-alternatives --set gcc /usr/bin/gcc-8
+      export CC=gcc
+      if [ -z "${BACKEND##*cpp*}" ]; then sudo update-alternatives --set g++ /usr/bin/g++-8; export CXX=g++; fi
+    fi
+  - |
+    if [ "$TRAVIS_OS_NAME" == "osx" -o "$STACKLESS" == "true" ]; then
+      echo "Installing Miniconda"
+      if [ "$TRAVIS_OS_NAME" == "osx" ]; then CONDA_PLATFORM=MacOSX; else CONDA_PLATFORM=Linux; fi
+      travis_retry wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda$PY-latest-${CONDA_PLATFORM}-x86_64.sh || exit 1
+      bash miniconda.sh -b -p $HOME/miniconda && rm miniconda.sh || exit 1
+      conda --version || exit 1
+      #conda install --quiet --yes nomkl --file=test-requirements.txt --file=test-requirements-cpython.txt
+      if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+        which clang && clang --version && export CC="clang -Wno-deprecated-declarations" || true
+        which clang++ && clang++ --version && export CXX="clang++ -stdlib=libc++ -Wno-deprecated-declarations" || true
+      fi
+    fi
+  - if [ -n "$CC" ]; then which ${CC%% *}; $CC --version; fi
+  - if [ -n "$CXX" ]; then which ${CXX%% *}; $CXX --version; fi
 install:
   - pip install -r requirements.txt
 script:
