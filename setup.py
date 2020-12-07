@@ -59,7 +59,9 @@ setup(
     ],
 
     ext_modules = cythonize([
-        Extension('lublin99', ['parallelworkloads/lublin99.pyx'])
+        Extension('swf', ['parallelworkloads/swf.pyx']),
+        Extension('lublin99', ['parallelworkloads/lublin99.pyx']),
+        Extension('tsafrir05', ['parallelworkloads/tsafrir05.pyx']),
     ]),
 
     keywords='workload, standard workload format, swf',

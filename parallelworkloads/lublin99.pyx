@@ -1,10 +1,14 @@
+# distutils: language = c++
+
 DEF INTERACTIVE = 0
 DEF BATCH = 1
 
 DEF BUCKETS = 48
 
 from typing import List
-from collections import namedtuple
+from parallelworkloads cimport swf
+from parallelworkloads._swf cimport Job_t
+from libcpp.vector cimport vector
 
 cdef extern from "stdlib.h":
     void srand48(long seed)
@@ -38,15 +42,6 @@ ctypedef int bool
 ctypedef int JobType 
 ctypedef (double, double, double, double, double, double) RunTimeParameters
 ctypedef (double, double, double, double) InterArrivalParameters
-
-SwfJob = namedtuple(
-    'SwfJob', (
-        'jobId', 'submissionTime', 'waitTime', 'runTime', 'allocProcs',
-        'avgCpuUsage', 'usedMem', 'reqProcs', 'reqTime', 'reqMem', 'status',
-        'userId', 'groupId', 'executable', 'queueNum', 'partNum',
-        'precedingJob', 'thinkTime'
-    )
-)
 
 cdef _validateJobType(JobType jobType):
     if jobType > BATCH or jobType < INTERACTIVE:
@@ -224,11 +219,11 @@ cdef class Lublin99:
         return (self.aarr[jobType], self.barr[jobType],
                 self.anum[jobType], self.bnum[jobType])
 
-    def generate(self) -> List[SwfJob]:
+    cdef vector[Job_t] _generate(self):
         arrive_init(self.aarr, self.barr, self.anum, self.bnum,
                     self._start, self.weights)
 
-        ret = []
+        cdef vector[Job_t] ret
         for i in range(self._numJobs):
             arrivalTime = arrive(&self._currentType, self.weights, self.aarr,
                                  self.barr)
@@ -246,9 +241,18 @@ cdef class Lublin99:
                 nodes
             )
 
-            ret.append(SwfJob(
+            ret.push_back(Job_t(
                 i + 1, arrivalTime, -1, runTime, nodes, -1, -1, -1, -1, -1, 1,
                 -1, -1, -1, self._currentType, -1, -1, -1
             ))
 
+        return ret
+
+    def generate(self) -> List[swf.SwfJob]:
+        tmp = self._generate()
+        ret = [0] * tmp.size()
+        i = 0
+        for e in tmp:
+            ret[i] = swf.build(&e)
+            i += 1
         return ret
