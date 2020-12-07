@@ -32,3 +32,25 @@ The following code shows how to use it:
    reqMem=-1, status=1, userId=-1, groupId=-1, executable=-1, queueNum=0,
    partNum=-1, precedingJob=-1, thinkTime=-1)]
 
+User runtime estimates
+----------------------
+
+`parallelworkloads` also supports generating runtime estimates based on the
+model proposed by Dan Tsafrir in 2005. For the model to work, it needs at least
+200 jobs. Here's an example continuing the previous one:
+
+.. code:: python
+
+   from parallelworkloads import tsafrir05
+
+   w.numJobs = 200
+   jobs = w.generate()
+   print('Original requested time of first job:', jobs[0].reqTime)
+   t = tsafrir05.Tsafrir05(jobs)
+   jobs = t.generate(jobs)
+   print('Generated requested time of first job:', jobs[0].reqTime)
+
+Which gives as output:
+
+   Original requested time: -1
+   Generated requested time: 22962.0
