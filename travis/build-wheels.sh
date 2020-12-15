@@ -10,10 +10,12 @@ function repair_wheel {
     fi
 }
 
+UNSUPPORTED="(27|34|35)"
+
 # Compile wheels
 for PYBIN in /opt/python/*/bin; do
-    if [[ $PYBIN == *"27"* ]]; then
-        echo 'Ignoring python 2.7.'
+    if ! echo $PYBIN | egrep -v $UNSUPPORTED > /dev/null; then
+        echo "Ignoring unsupported python $PYBIN"
     else
         "${PYBIN}/pip" install -r /io/requirements.txt
         "${PYBIN}/python" -c 'import pathlib' || "${PYBIN}/pip" install pathlib2
