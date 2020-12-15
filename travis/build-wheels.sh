@@ -10,6 +10,9 @@ function repair_wheel {
     fi
 }
 
+# Python 2.7 is too problematic. Drop it
+sudo rm -fr /opt/python/*27*
+
 # Compile wheels
 for PYBIN in /opt/python/*/bin; do
     "${PYBIN}/pip" install -r /io/requirements.txt
