@@ -1,7 +1,7 @@
 # distutils: language = c++
 
-from parallelworkloads cimport swf
-from parallelworkloads._swf cimport Job_t
+from . cimport swf
+from ._swf cimport Job_t
 
 from libcpp cimport bool
 from libcpp.vector cimport vector

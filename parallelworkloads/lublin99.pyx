@@ -6,8 +6,8 @@ DEF BATCH = 1
 DEF BUCKETS = 48
 
 from typing import List
-from parallelworkloads cimport swf
-from parallelworkloads._swf cimport Job_t
+from . cimport swf
+from ._swf cimport Job_t
 from libcpp.vector cimport vector
 
 cdef extern from "stdlib.h":

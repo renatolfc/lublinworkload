@@ -1,6 +1,6 @@
 # distutils: language = c++
 
-from parallelworkloads cimport _swf
+from . cimport _swf
 
 cdef object build(_swf.JobPointer job):
     return SwfJob(

@@ -1,6 +1,6 @@
 # distutils: language = c++
 
-from parallelworkloads cimport _swf
+from . cimport _swf
 
 cdef class SwfJob:
     cdef _swf.Job_t job

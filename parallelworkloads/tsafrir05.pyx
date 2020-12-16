@@ -4,9 +4,9 @@ from typing import Optional, List
 
 from libcpp.vector cimport vector
 
-from parallelworkloads cimport swf
-from parallelworkloads cimport _tsafrir05
-from parallelworkloads._swf cimport Job_t
+from . cimport swf
+from . cimport _tsafrir05
+from ._swf cimport Job_t
 
 cdef class Tsafrir05:
     cdef _tsafrir05.ParamPointer params
