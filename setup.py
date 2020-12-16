@@ -62,15 +62,15 @@ setup(
     ],
 
     ext_modules = cythonize([
-        Extension('swf', ['parallelworkloads/swf.pyx']),
-        Extension('lublin99', ['parallelworkloads/lublin99.pyx']),
-        Extension('tsafrir05', ['parallelworkloads/tsafrir05.pyx']),
+        Extension('parallelworkloads.swf', ['parallelworkloads/swf.pyx']),
+        Extension('parallelworkloads.lublin99', ['parallelworkloads/lublin99.pyx']),
+        Extension('parallelworkloads.tsafrir05', ['parallelworkloads/tsafrir05.pyx']),
     ], language_level=3),
 
     keywords='workload, standard workload format, swf',
 
-    package_dir={'': 'parallelworkloads'},
-    packages=find_packages(where='parallelworkloads'),
+    package_dir={'parallelworkloads': 'parallelworkloads'},
+    packages=find_packages(),
     python_requires='>=3.6, <4',
 
     # This field lists other packages that your project depends on to run.
