@@ -35,9 +35,7 @@ script:
 deploy:
   provider: script
   script:
-    - pip install twine || echo
-    - python setup.py sdist
-    - TWINE_USERNAME=trovao TWINE_PASSWORD=$PYPI_PASSWORD twine --skip-existing --non-interactive upload wheelhouse/*
+    - pip install twine || echo && python setup.py sdist && TWINE_USERNAME=trovao TWINE_PASSWORD=$PYPI_PASSWORD twine --skip-existing --non-interactive upload wheelhouse/*
   on:
     tags: true
   skip_cleanup: true
