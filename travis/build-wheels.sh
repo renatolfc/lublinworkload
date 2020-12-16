@@ -28,7 +28,7 @@ for whl in wheelhouse/*.whl; do
     repair_wheel "$whl"
 done
 
-# Test installation
-for PYBIN in /opt/python/*/bin/; do
-    "${PYBIN}/pip" install parallelworkloads --no-index -f /io/wheelhouse
-done
+# # Test installation
+# for PYBIN in /opt/python/*/bin/; do
+#     "${PYBIN}/pip" install parallelworkloads --no-index -f /io/wheelhouse
+# done
