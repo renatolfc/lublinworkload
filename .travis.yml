@@ -37,7 +37,7 @@ script:
 deploy:
   provider: script
   script:
-    - /opt/python/cp38-cp38/bin/pip install twine cython || echo && /opt/python/cp38-cp38/bin/python setup.py sdist && TWINE_USERNAME=trovao TWINE_PASSWORD=$PYPI_PASSWORD /opt/python/cp38-cp38/bin/twine upload --skip-existing --non-interactive wheelhouse/*
+    - pip install twine cython || echo && python setup.py sdist && TWINE_USERNAME=trovao TWINE_PASSWORD=$PYPI_PASSWORD twine upload --skip-existing --non-interactive wheelhouse/*
   on:
     tags: true
   skip_cleanup: true
