@@ -28,8 +28,7 @@ for whl in wheelhouse/*.whl; do
     repair_wheel "$whl"
 done
 
-# Install packages and test
+# Test installation
 for PYBIN in /opt/python/*/bin/; do
-    "${PYBIN}/pip" install python-manylinux-demo --no-index -f /io/wheelhouse
-    (cd "$HOME"; "${PYBIN}/nosetests" pymanylinuxdemo)
+    "${PYBIN}/pip" install parallelworkloads --no-index -f /io/wheelhouse
 done
