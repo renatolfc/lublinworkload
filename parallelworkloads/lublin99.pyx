@@ -123,8 +123,8 @@ cdef class Lublin99:
 
         return self.pow2Prob[jobType]
 
-    cpdef setParallelJobProbabilities(self, JobType jobType, double uLow, double uMed,
-                                     double uHi, double uProb):
+    cpdef setParallelJobProbabilities(self, JobType jobType, double uLow,
+                                      double uMed, double uHi, double uProb):
         _validateJobType(jobType)
 
         if uLow > uHi:
