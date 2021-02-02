@@ -15,6 +15,7 @@ cdef class SwfJob:
                  reqTime=-1, reqMem=-1, status=-1, userId=-1, groupId=-1,
                  executable=-1, queueNum=-1, partNum=-1, precedingJob=-1,
                  thinkTime=-1):
+
         self.jobId = jobId
         self.submissionTime = submissionTime
         self.waitTime = waitTime

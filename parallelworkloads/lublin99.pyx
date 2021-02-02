@@ -63,11 +63,12 @@ cdef class Lublin99:
     cdef int _numJobs
     cdef JobType _currentType
 
-    def __init__(self, jobType, seed):
+    def __init__(self, jobType, seed, numJobs=1000):
         self.seed = seed
         self.jobType = jobType
 
-        self.numJobs = 1000
+        self._currentType = BATCH
+        self.numJobs = numJobs
         self.start = 8
 
         srand48(self.seed)
@@ -96,7 +97,7 @@ cdef class Lublin99:
         def __get__(self):
             return self._start
 
-    cdef setSerialProbability(self, JobType jobType, double prob):
+    cpdef setSerialProbability(self, JobType jobType, double prob):
         _validateJobType(jobType)
 
         if self.jobType:
@@ -104,12 +105,12 @@ cdef class Lublin99:
         else:
             self.serialProb[0] = self.serialProb[1] = prob
 
-    cdef double getSerialProbability(self, JobType jobType):
+    cpdef double getSerialProbability(self, JobType jobType):
         _validateJobType(jobType)
 
         return self.serialProb[jobType]
 
-    cdef setPower2Probability(self, JobType jobType, double prob):
+    cpdef setPower2Probability(self, JobType jobType, double prob):
         _validateJobType(jobType)
 
         if self.jobType:
@@ -117,12 +118,12 @@ cdef class Lublin99:
         else:
             self.pow2Prob[0] = self.pow2Prob[1] = prob
 
-    cdef double getPower2Probability(self, JobType jobType):
+    cpdef double getPower2Probability(self, JobType jobType):
         _validateJobType(jobType)
 
         return self.pow2Prob[jobType]
 
-    cdef setParallelJobProbabilities(self, JobType jobType, double uLow, double uMed,
+    cpdef setParallelJobProbabilities(self, JobType jobType, double uLow, double uMed,
                                      double uHi, double uProb):
         _validateJobType(jobType)
 
@@ -131,12 +132,12 @@ cdef class Lublin99:
                 "Lowest job size cannot be higher than max job size"
             )
 
-        if not (uHi - 1.5 < uMed < uHi - 3.5):
+        if not (uHi - 3.5 < uMed < uHi - 1.5):
             raise ValueError(
-                "Medium probability should be in [uHi - 1.5, uHi - 3.5]"
+                "Medium probability should be in [uHi - 3.5, uHi - 1.5]"
             )
 
-        if not (0.7 < uProb < .95):
+        if not (0.7 <= uProb <= .95):
             raise ValueError(
                 "uProb should be in [0.7, 0.95]"
             )
@@ -152,28 +153,28 @@ cdef class Lublin99:
             self.uHi[INTERACTIVE] = self.uHi[BATCH] = uHi
             self.uProb[INTERACTIVE] = self.uProb[BATCH] = uProb
 
-    cdef double getParallelJobUProb(self, JobType jobType):
+    cpdef double getParallelJobUProb(self, JobType jobType):
         _validateJobType(jobType)
 
         return self.uProb[jobType]
 
-    cdef double getParallelJobUHi(self, JobType jobType):
+    cpdef double getParallelJobUHi(self, JobType jobType):
         _validateJobType(jobType)
 
         return self.uHi[jobType]
 
-    cdef double getParallelJobUMed(self, JobType jobType):
+    cpdef double getParallelJobUMed(self, JobType jobType):
         _validateJobType(jobType)
 
         return self.uMed[jobType]
 
-    cdef double getParallelJobULow(self, JobType jobType):
+    cpdef double getParallelJobULow(self, JobType jobType):
         _validateJobType(jobType)
 
         return self.uLow[jobType]
 
-    cdef void setRunTimeParameters(self, JobType jobType, double a1, double a2,
-                                   double b1, double b2, double pa, double pb):
+    cpdef void setRunTimeParameters(self, JobType jobType, double a1, double a2,
+                                    double b1, double b2, double pa, double pb):
         _validateJobType(jobType)
 
         if self.jobType:
@@ -192,13 +193,13 @@ cdef class Lublin99:
             self.pa[INTERACTIVE] = self.pa[BATCH] = pa
             self.pb[INTERACTIVE] = self.pb[BATCH] = pb
 
-    cdef RunTimeParameters getRunTimeParameters(self, JobType jobType):
+    cpdef RunTimeParameters getRunTimeParameters(self, JobType jobType):
         _validateJobType(jobType)
 
         return (self.a1[jobType], self.a2[jobType], self.b1[jobType],
                 self.b2[jobType], self.pa[jobType], self.pb[jobType])
 
-    cdef setInterArrivalTimeParameters(self, JobType jobType, double aarr,
+    cpdef setInterArrivalTimeParameters(self, JobType jobType, double aarr,
                                        double barr, double anum, double bnum,
                                        double arar):
         _validateJobType(jobType)
@@ -214,7 +215,7 @@ cdef class Lublin99:
             self.anum[INTERACTIVE] = self.barr[BATCH] = anum
             self.bnum[INTERACTIVE] = self.barr[BATCH] = bnum
 
-    cdef InterArrivalParameters getInterArrivalTimeParameters(self, JobType
+    cpdef InterArrivalParameters getInterArrivalTimeParameters(self, JobType
                                                               jobType):
         return (self.aarr[jobType], self.barr[jobType],
                 self.anum[jobType], self.bnum[jobType])
