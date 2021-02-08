@@ -132,7 +132,7 @@ cdef class Lublin99:
                 "Lowest job size cannot be higher than max job size"
             )
 
-        if not (uHi - 3.5 < uMed < uHi - 1.5):
+        if not (uHi - 3.5 <= uMed <= uHi - 1.5):
             raise ValueError(
                 "Medium probability should be in [uHi - 3.5, uHi - 1.5]"
             )
