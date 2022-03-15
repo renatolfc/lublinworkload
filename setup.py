@@ -12,7 +12,7 @@ https://github.com/pypa/sampleproject
 from setuptools import setup, find_packages, Extension
 try:
     from Cython.Build import cythonize
-except NameError:
+except (NameError, ModuleNotFoundError):
     def cythonize(*args, **kwargs):
         pass
 try:
