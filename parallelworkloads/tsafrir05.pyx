@@ -19,7 +19,7 @@ cdef class Tsafrir05:
                  max_est : Optional[int] = None):
 
         if max_est is None:
-            max_est = max([e.runTime for e in jobList])
+            max_est = max(max([e.runTime for e in jobList]), 3600)
 
         cdef vector[_tsafrir05.EstBin_t] bins = vector[_tsafrir05.EstBin_t]()
         cdef int size = len(jobList)
