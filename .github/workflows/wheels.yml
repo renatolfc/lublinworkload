@@ -33,7 +33,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build sdist
-      run: pipx install cython && pipx run build --sdist
+      run: pipx install cython && pipx run --system-site-packages build --sdist
 
     - uses: actions/upload-artifact@v2
       with:
