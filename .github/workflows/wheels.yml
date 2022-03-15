@@ -23,8 +23,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip build
-          pip install cython=="0.29.28"
+          python -m pip install --upgrade pip build
+          python -m pip install cython=="0.29.28"
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
